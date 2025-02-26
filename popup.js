@@ -60,12 +60,61 @@ function formatTime(seconds) {
 }
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    fetchSubmissions();
-    
-    // Add event listeners for filters
-    document.getElementById('statusFilter').addEventListener('change', fetchSubmissions);
-    document.getElementById('languageFilter').addEventListener('change', fetchSubmissions);
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Show loading state
+        const submissionsList = document.getElementById('submissions-list');
+        submissionsList.innerHTML = '<p>Loading submissions...</p>';
+
+        // Fetch submissions from the API
+        const response = await fetch('http://localhost:5001/api/submissions');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const submissions = await response.json();
+
+        // Clear loading state
+        submissionsList.innerHTML = '';
+
+        if (submissions.length === 0) {
+            submissionsList.innerHTML = '<p>No submissions yet.</p>';
+            return;
+        }
+
+        // Group submissions by problem
+        const groupedSubmissions = submissions.reduce((acc, sub) => {
+            if (!acc[sub.problemId]) {
+                acc[sub.problemId] = [];
+            }
+            acc[sub.problemId].push(sub);
+            return acc;
+        }, {});
+
+        // Display submissions grouped by problem
+        Object.entries(groupedSubmissions).forEach(([problemId, subs]) => {
+            const problemDiv = document.createElement('div');
+            problemDiv.className = 'problem-group';
+            
+            const latestSub = subs[0]; // Assuming submissions are sorted by date
+            
+            problemDiv.innerHTML = `
+                <h3>${latestSub.title}</h3>
+                <p>Difficulty: ${latestSub.difficulty}</p>
+                <p>Submissions: ${subs.length}</p>
+                <p>Best Time: ${Math.min(...subs.map(s => s.timeSpent))} seconds</p>
+                <p>Latest Runtime: ${latestSub.runtime}</p>
+                <p>Latest Memory: ${latestSub.memory}</p>
+                <hr>
+            `;
+            
+            submissionsList.appendChild(problemDiv);
+        });
+
+    } catch (error) {
+        console.error('Error loading submissions:', error);
+        document.getElementById('submissions-list').innerHTML = 
+            '<p class="error">Error loading submissions. Please try again later.</p>';
+    }
 });
 
 // Listen for new submissions
