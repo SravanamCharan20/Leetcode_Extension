@@ -1,0 +1,28 @@
+{
+    "manifest_version": 3,
+    "name": "LeetCode Tracker",
+    "version": "1.0",
+    "description": "Track your LeetCode problem-solving activity",
+    "permissions": [
+        "storage",
+        "activeTab",
+        "tabs",
+        "webNavigation"
+    ],
+    "host_permissions": [
+        "https://leetcode.com/*",
+        "http://localhost:5001/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://leetcode.com/problems/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    }
+}
