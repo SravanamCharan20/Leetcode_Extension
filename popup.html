@@ -1,41 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LeetCode Tracker</title>
     <style>
         body {
-            width: 400px;
-            padding: 15px;
+            width: 300px;
+            padding: 10px;
             font-family: Arial, sans-serif;
         }
-        .submission {
-            border: 1px solid #ddd;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .accepted { color: green; }
-        .failed { color: red; }
-        .filters {
+        .problem-group {
             margin-bottom: 15px;
+        }
+        .error {
+            color: red;
+        }
+        h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        p {
+            margin: 5px 0;
+            color: #34495e;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <h2>Recent Submissions</h2>
-    <div class="filters">
-        <select id="statusFilter">
-            <option value="">All Status</option>
-            <option value="Accepted">Accepted</option>
-            <option value="Failed">Failed</option>
-        </select>
-        <select id="languageFilter">
-            <option value="">All Languages</option>
-        </select>
+    <h2>LeetCode Submissions</h2>
+    <div id="submissions-list">
+        Loading...
     </div>
-    <div id="submissions"></div>
     <script src="popup.js"></script>
 </body>
 </html>
